@@ -12,21 +12,21 @@ echo "Please enter DB password:"
 read -s mysql_root_password
 
 VALIDATE(){
-   if [ $1 -ne 0 ]
-   then
-        echo -e "$2...$R FAILURE $N"
-        exit 1
-    else
-        echo -e "$2...$G SUCCESS $N"
-    fi
+if [ $1 -ne 0 ]
+then
+    echo -e "$2...$R FAILURE $N"
+    exit 1
+else
+    echo -e "$2...$G SUCCESS $N"
+fi
 }
 
 if [ $USERID -ne 0 ]
 then
-    echo "Please run this script with root access."
-    exit 1 # manually exit if error comes.
+echo "Please run this script with root access."
+exit 1 # manually exit if error comes.
 else
-    echo "You are super user."
+echo "You are super user."
 fi
 
 dnf module disable nodejs -y &>>$LOGFILE
@@ -41,10 +41,10 @@ VALIDATE $? "Installing nodejs"
 id expense &>>$LOGFILE
 if [ $? -ne 0 ]
 then
-    useradd expense &>>$LOGFILE
-    VALIDATE $? "Creating expense user"
+useradd expense &>>$LOGFILE
+VALIDATE $? "Creating expense user"
 else
-    echo -e "Expense user already created...$Y SKIPPING $N"
+echo -e "Expense user already created...$Y SKIPPING $N"
 fi
 
 mkdir -p /app &>>$LOGFILE
@@ -77,7 +77,7 @@ VALIDATE $? "Enabling backend"
 dnf install mysql -y &>>$LOGFILE
 VALIDATE $? "Installing MySQL Client"
 
-mysql -h 172.31.24.195 -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+mysql -h 172.31.26.174 -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
 VALIDATE $? "Schema loading"
 
 systemctl restart backend &>>$LOGFILE
